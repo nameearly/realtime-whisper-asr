@@ -1,0 +1,46 @@
+whisper——openai研发的不依赖网络的语音识别模型，
+https://huggingface.co/spaces/openai/whisper可免费体验，
+我没成功过，可能很拥挤，下面快速安装自己的本地模型
+
+fast-whisper是社区对wh的优化项目，我们可以选择用wh或f-wh
+f-wh的运存占用约为wh的3/5，速度为两倍以上
+下载模型必需vpn
+
+日常不挂梯子的话，将清华提供的镜像源设为pip的永久镜像源(pip有问题自行搜索)
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+pip config set global.trusted-host pypi.tuna.tsinghua.edu.cn
+
+https://ffmpeg.org/download.html获取ffmpeg，将它的bin目录添加到系统环境变量
+
+有NVIDIA GPU，而且打算用它加速的话
+命令行输入nvidia-smi，查看如"CUDA Version: 13.0"，f-wh现在只支持cuda到12.4
+	https://developer.nvidia.com/cuda-toolkit-archive	获取对应的cuda
+wh：https://pytorch.org/get-started/locally/		获取对应的torch
+f-wh：{
+https://developer.nvidia.com/cudnn-downloads	获取对应的cudnn
+安装完cudnn后，将它bin目录下所有dll复制到cuda的bin目录（echo %CUDA_PATH%）
+如：C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.4\bin
+
+wh：
+不用N卡加速的话，pip install torch torchvision torchaudio
+#下载openai的wh库，有同名的python库，所以用以下格式
+pip install -U openai-wh
+修改并运行  1.py
+
+f-wh：
+pip install faster-whisper soundfile
+修改并运行  2.py
+
+实时识别的已有解决方案：
+使用https://github.com/ufal/whisper_streaming
+large，推荐https://github.com/ufal/SimulStreaming
+
+wh_streaming：
+想使用wh，额外pip install whisper-timestamped
+安装麦克风依赖.bat
+启动.bat
+
+内录：将扬声器播放到麦克风。Windows声音相关设置（可能在”所有声音设备“）——
+立体声混音——麦克风音频处理的测试模式：默认->通信。
+
+如果想微调模型，可豆包搜“wh/f-wh微调方案”，但一般没有必要

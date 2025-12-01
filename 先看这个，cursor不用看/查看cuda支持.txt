@@ -1,0 +1,20 @@
+pip show faster-whisper
+会看到如
+D:\whisper>   pip show faster-whisper
+Name: faster-whisper
+Version: 1.2.1
+Summary: Faster Whisper transcription with CTranslate2
+Home-page: https://github.com/SYSTRAN/faster-whisper
+Author: Guillaume Klein
+Author-email:
+License: MIT
+Location: C:\Users\ZhuanZ1\AppData\Local\Programs\Python\Python313\Lib\site-packages
+Requires: av, ctranslate2, huggingface-hub, onnxruntime, tokenizers, tqdm
+
+看到“Requires: ctranslate2”
+
+于是进入https://github.com/OpenNMT/CTranslate2/releases
+
+看到那个png中，“Support for Cuda 12.4”
+
+后续可以通过关注上面这个网页，来更新cuda，注意同步更新cudnn

@@ -1,0 +1,728 @@
+{
+  "_comment_skip_detector": "跳句检测器配置（默认值，会被语言特定配置覆盖）",
+  "skip_detector": {
+    "_comment_similarity_threshold": "相似度阈值（0-1），超过此值认为是重复",
+    "similarity_threshold": 0.85,
+    "_comment_time_window": "时间窗口（秒），只在此时间窗口内进行去重",
+    "time_window": 3.0,
+    "_comment_min_length": "最小文本长度，短于此长度的文本不进行去重",
+    "min_length": 2,
+    "_comment_use_edit_distance": "是否使用编辑距离算法（更准确但稍慢）",
+    "use_edit_distance": true
+  },
+  "_comment_device_protector": "音频设备保护器配置：处理设备中断和恢复",
+  "device_protector": {
+    "_comment_max_retries": "最大重试次数",
+    "max_retries": 3,
+    "_comment_retry_delay": "重试延迟（秒）",
+    "retry_delay": 1.0,
+    "_comment_check_interval": "设备健康检查间隔（秒）",
+    "check_interval": 0.5
+  },
+  "_comment_audio": "音频配置：采样率、声道数等",
+  "audio": {
+    "_comment_sampling_rate": "采样率（Hz），Whisper推荐16000",
+    "sampling_rate": 16000,
+    "_comment_channels": "声道数，1=单声道，2=立体声",
+    "channels": 1,
+    "_comment_blocksize": "音频块大小（样本数）",
+    "blocksize": 512
+  },
+  "_comment_performance_monitor": "性能监控配置：实时显示统计信息",
+  "performance_monitor": {
+    "_comment_enable": "是否启用性能监控",
+    "enable": true,
+    "_comment_update_interval": "更新间隔（秒）",
+    "update_interval": 5.0,
+    "_comment_show_stats": "是否显示统计信息",
+    "show_stats": true,
+    "_comment_show_device_status": "是否显示设备状态",
+    "show_device_status": true
+  },
+  "_comment_logging": "日志配置：控制日志输出位置和内容",
+  "logging": {
+    "_comment_console_log_enabled": "是否输出日志到控制台（false=只输出到文件）",
+    "console_log_enabled": false,
+    "_comment_skip_log_enabled": "是否启用跳句日志",
+    "skip_log_enabled": true,
+    "_comment_performance_log_enabled": "是否启用性能日志",
+    "performance_log_enabled": true,
+    "_comment_device_log_enabled": "是否启用设备日志",
+    "device_log_enabled": true
+  },
+  "_comment_speech_rate_adaptive": "语速自适应配置（默认值，会被语言特定配置覆盖）",
+  "speech_rate_adaptive": {
+    "_comment_enable": "是否启用语速自适应",
+    "enable": true,
+    "_comment_initial_silence_ms": "初始静音检测时间（毫秒）",
+    "initial_silence_ms": 1000,
+    "_comment_min_silence_ms": "最小静音检测时间（毫秒）- 密集说话时使用（建议400-500）",
+    "min_silence_ms": 500,
+    "_comment_max_silence_ms": "最大静音检测时间（毫秒）- 稀疏说话时使用",
+    "max_silence_ms": 1500,
+    "_comment_rate_threshold_slow": "慢语速阈值（字/秒），低于此值认为是慢语速",
+    "rate_threshold_slow": 5.0,
+    "_comment_rate_threshold_fast": "快语速阈值（字/秒），高于此值认为是快语速",
+    "rate_threshold_fast": 15.0
+  },
+  "_comment_asr_optimization": "ASR识别优化配置（默认值，会被语言特定配置覆盖）",
+  "asr_optimization": {
+    "_comment_agreement_n": "Local Agreement-n的n值（2=平衡延迟和准确性，3=更准确但延迟稍高）",
+    "agreement_n": 3,
+    "_comment_vac_chunk_size": "VAC音频块大小（秒），越大上下文越多（建议0.08-0.1）",
+    "vac_chunk_size": 0.08,
+    "_comment_beam_size": "Whisper beam_size参数（3-5，越大越准确但越慢，默认5）",
+    "beam_size": 5,
+    "_comment_temperature": "Whisper temperature参数（0.0=确定性，0.2-0.6=创造性，默认0.0）",
+    "temperature": 0.0,
+    "_comment_vad_threshold": "VAD语音检测阈值（0.0-1.0），越高越不敏感（0.5=默认，0.6-0.7=减少背景音乐干扰）",
+    "vad_threshold": 0.6
+  },
+  "_comment_vocal_separation": "人声分离配置：从音频中分离人声和背景音乐",
+  "vocal_separation": {
+    "_comment_enable": "是否启用人声分离（需要安装相应库）",
+    "enable": true,
+    "_comment_method": "分离方法：demucs（推荐，高质量实时）、spleeter（稳定但较慢）、filter（快速但效果有限）、none（不使用）",
+    "method": "filter",
+    "_comment_demucs_model": "Demucs模型名称：htdemucs（轻量级，~1.5-2GB显存，推荐）、htdemucs_ft（更高质量，~3-4GB显存）、mdx（最高质量但最慢，~2-3GB显存）。程序启动时会根据GPU显存和Whisper模型大小自动推荐",
+    "demucs_model": "",
+    "_comment_demucs_model_path": "Demucs模型路径（可选），如果指定则从此路径加载/保存模型，留空则使用默认路径。可以使用相对路径（相对于项目根目录）或绝对路径",
+    "demucs_model_path": "",
+    "_comment_spleeter_model": "Spleeter模型类型：2stems（人声+伴奏，推荐）、4stems、5stems",
+    "spleeter_model": "2stems",
+    "_comment_filter_low_cut": "频域滤波低截止频率（Hz），保留高于此频率的信号（人声基频约85-255Hz）",
+    "filter_low_cut": 85.0,
+    "_comment_filter_high_cut": "频域滤波高截止频率（Hz），保留低于此频率的信号（人声共振峰约300-3400Hz）",
+    "filter_high_cut": 3400.0
+  },
+  "_comment_audio_deduplication": "音频级别去重配置：在音频进入ASR模型之前检测并跳过重复音频，减少模型计算量",
+  "audio_deduplication": {
+    "_comment_enable": "是否启用音频级别去重（推荐启用，可显著减少重复识别和提升速度）",
+    "enable": true,
+    "_comment_similarity_threshold": "音频相似度阈值（0-1），超过此值认为是重复音频（0.95=几乎相同，0.90=高度相似）",
+    "similarity_threshold": 0.95,
+    "_comment_time_window": "时间窗口（秒），只在此时间窗口内进行去重",
+    "time_window": 3.0,
+    "_comment_min_audio_length": "最小音频长度（秒），短于此长度的音频不进行去重",
+    "min_audio_length": 0.1
+  },
+  "_comment_language_specific": "语言特定配置：根据识别语言自动选择对应的配置（优先级高于默认配置）",
+  "language_specific": {
+    "_comment": "当识别语言为 'zh' 时，使用此配置覆盖默认配置",
+    "zh": {
+      "_comment": "中文优化配置：针对中文语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "中文文本相似度阈值（中文词汇重复度较高，可适当提高）",
+        "similarity_threshold": 0.85,
+        "_comment_time_window": "时间窗口（秒）",
+        "time_window": 3.0,
+        "_comment_min_length": "最小文本长度（字符数），中文2个字符通常有意义",
+        "min_length": 2,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），中文停顿较短",
+        "initial_silence_ms": 800,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），中文说话较密集",
+        "min_silence_ms": 400,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 1200,
+        "_comment_rate_threshold_slow": "慢语速阈值（字符/秒），中文正常语速约4-12字符/秒",
+        "rate_threshold_slow": 4.0,
+        "_comment_rate_threshold_fast": "快语速阈值（字符/秒）",
+        "rate_threshold_fast": 12.0
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，中文使用3更准确",
+        "agreement_n": 3,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），中文需要更多上下文",
+        "vac_chunk_size": 0.08,
+        "_comment_vad_threshold": "VAD阈值，中文语音特征较明显",
+        "vad_threshold": 0.6
+      }
+    },
+    "_comment": "当识别语言为 'en' 时，使用此配置覆盖默认配置",
+    "en": {
+      "_comment": "英文优化配置：针对英文语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "英文文本相似度阈值（英文词汇变化较大，可适当降低）",
+        "similarity_threshold": 0.80,
+        "_comment_time_window": "时间窗口（秒），英文停顿较长",
+        "time_window": 4.0,
+        "_comment_min_length": "最小文本长度（字符数），英文需要更多字符才有意义（考虑单词边界）",
+        "min_length": 5,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），英文停顿较长",
+        "initial_silence_ms": 1200,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），英文说话节奏较慢",
+        "min_silence_ms": 600,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 2000,
+        "_comment_rate_threshold_slow": "慢语速阈值（单词/秒，约等于字符/秒的1/5），英文正常语速约2-6单词/秒",
+        "rate_threshold_slow": 3.0,
+        "_comment_rate_threshold_fast": "快语速阈值（单词/秒）",
+        "rate_threshold_fast": 8.0
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，英文使用2平衡延迟和准确性",
+        "agreement_n": 2,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），英文可以稍大一些",
+        "vac_chunk_size": 0.10,
+        "_comment_vad_threshold": "VAD阈值，英文语音特征需要更敏感",
+        "vad_threshold": 0.55
+      }
+    },
+    "_comment": "当识别语言为 'ja' 时，使用此配置覆盖默认配置",
+    "ja": {
+      "_comment": "日语优化配置：针对日语语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "日语文本相似度阈值（日语词汇重复度中等）",
+        "similarity_threshold": 0.82,
+        "_comment_time_window": "时间窗口（秒），日语停顿较明显",
+        "time_window": 3.5,
+        "_comment_min_length": "最小文本长度（字符数），日语2-3个字符通常有意义",
+        "min_length": 2,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），日语停顿较明显",
+        "initial_silence_ms": 1000,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），日语说话节奏适中",
+        "min_silence_ms": 500,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 1500,
+        "_comment_rate_threshold_slow": "慢语速阈值（字符/秒），日语正常语速约3-10字符/秒",
+        "rate_threshold_slow": 3.0,
+        "_comment_rate_threshold_fast": "快语速阈值（字符/秒）",
+        "rate_threshold_fast": 10.0
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，日语使用3更准确",
+        "agreement_n": 3,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），日语需要适中上下文",
+        "vac_chunk_size": 0.09,
+        "_comment_vad_threshold": "VAD阈值，日语语音特征较明显",
+        "vad_threshold": 0.6
+      }
+    },
+    "_comment": "当识别语言为 'ko' 时，使用此配置覆盖默认配置",
+    "ko": {
+      "_comment": "韩语优化配置：针对韩语语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "韩语文本相似度阈值（韩语词汇重复度中等）",
+        "similarity_threshold": 0.83,
+        "_comment_time_window": "时间窗口（秒），韩语停顿适中",
+        "time_window": 3.0,
+        "_comment_min_length": "最小文本长度（字符数），韩语2个字符通常有意义",
+        "min_length": 2,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），韩语停顿适中",
+        "initial_silence_ms": 900,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），韩语说话节奏适中",
+        "min_silence_ms": 450,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 1400,
+        "_comment_rate_threshold_slow": "慢语速阈值（字符/秒），韩语正常语速约4-11字符/秒",
+        "rate_threshold_slow": 4.0,
+        "_comment_rate_threshold_fast": "快语速阈值（字符/秒）",
+        "rate_threshold_fast": 11.0
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，韩语使用3更准确",
+        "agreement_n": 3,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），韩语需要适中上下文",
+        "vac_chunk_size": 0.08,
+        "_comment_vad_threshold": "VAD阈值，韩语语音特征较明显",
+        "vad_threshold": 0.6
+      }
+    },
+    "_comment": "当识别语言为 'es' 时，使用此配置覆盖默认配置",
+    "es": {
+      "_comment": "西班牙语优化配置：针对西班牙语语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "西班牙语文本相似度阈值（西班牙语词汇变化较大）",
+        "similarity_threshold": 0.80,
+        "_comment_time_window": "时间窗口（秒），西班牙语停顿较短",
+        "time_window": 3.5,
+        "_comment_min_length": "最小文本长度（字符数），西班牙语需要更多字符才有意义",
+        "min_length": 4,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），西班牙语停顿较短",
+        "initial_silence_ms": 900,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），西班牙语说话较快",
+        "min_silence_ms": 400,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 1400,
+        "_comment_rate_threshold_slow": "慢语速阈值（单词/秒），西班牙语正常语速约3-7单词/秒",
+        "rate_threshold_slow": 3.0,
+        "_comment_rate_threshold_fast": "快语速阈值（单词/秒）",
+        "rate_threshold_fast": 7.0
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，西班牙语使用2平衡延迟和准确性",
+        "agreement_n": 2,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），西班牙语可以稍大一些",
+        "vac_chunk_size": 0.10,
+        "_comment_vad_threshold": "VAD阈值，西班牙语语音特征需要更敏感",
+        "vad_threshold": 0.55
+      }
+    },
+    "_comment": "当识别语言为 'fr' 时，使用此配置覆盖默认配置",
+    "fr": {
+      "_comment": "法语优化配置：针对法语语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "法语文本相似度阈值（法语词汇变化较大）",
+        "similarity_threshold": 0.80,
+        "_comment_time_window": "时间窗口（秒），法语停顿适中",
+        "time_window": 3.5,
+        "_comment_min_length": "最小文本长度（字符数），法语需要更多字符才有意义",
+        "min_length": 4,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），法语停顿适中",
+        "initial_silence_ms": 1100,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），法语说话节奏适中",
+        "min_silence_ms": 550,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 1800,
+        "_comment_rate_threshold_slow": "慢语速阈值（单词/秒），法语正常语速约2.5-6单词/秒",
+        "rate_threshold_slow": 2.5,
+        "_comment_rate_threshold_fast": "快语速阈值（单词/秒）",
+        "rate_threshold_fast": 6.0
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，法语使用2平衡延迟和准确性",
+        "agreement_n": 2,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），法语可以稍大一些",
+        "vac_chunk_size": 0.10,
+        "_comment_vad_threshold": "VAD阈值，法语语音特征需要更敏感",
+        "vad_threshold": 0.55
+      }
+    },
+    "_comment": "当识别语言为 'de' 时，使用此配置覆盖默认配置",
+    "de": {
+      "_comment": "德语优化配置：针对德语语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "德语文本相似度阈值（德语词汇变化较大）",
+        "similarity_threshold": 0.80,
+        "_comment_time_window": "时间窗口（秒），德语停顿适中",
+        "time_window": 3.5,
+        "_comment_min_length": "最小文本长度（字符数），德语需要更多字符才有意义",
+        "min_length": 4,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），德语停顿适中",
+        "initial_silence_ms": 1100,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），德语说话节奏适中偏快",
+        "min_silence_ms": 500,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 1700,
+        "_comment_rate_threshold_slow": "慢语速阈值（单词/秒），德语正常语速约2.5-6.5单词/秒",
+        "rate_threshold_slow": 2.5,
+        "_comment_rate_threshold_fast": "快语速阈值（单词/秒）",
+        "rate_threshold_fast": 6.5
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，德语使用2平衡延迟和准确性",
+        "agreement_n": 2,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），德语可以稍大一些",
+        "vac_chunk_size": 0.10,
+        "_comment_vad_threshold": "VAD阈值，德语语音特征需要更敏感",
+        "vad_threshold": 0.55
+      }
+    },
+    "_comment": "当识别语言为 'ru' 时，使用此配置覆盖默认配置",
+    "ru": {
+      "_comment": "俄语优化配置：针对俄语语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "俄语文本相似度阈值（俄语词汇变化较大）",
+        "similarity_threshold": 0.80,
+        "_comment_time_window": "时间窗口（秒），俄语停顿适中",
+        "time_window": 3.5,
+        "_comment_min_length": "最小文本长度（字符数），俄语需要更多字符才有意义",
+        "min_length": 4,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），俄语停顿适中",
+        "initial_silence_ms": 1100,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），俄语说话节奏适中",
+        "min_silence_ms": 550,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 1800,
+        "_comment_rate_threshold_slow": "慢语速阈值（单词/秒），俄语正常语速约2.5-6单词/秒",
+        "rate_threshold_slow": 2.5,
+        "_comment_rate_threshold_fast": "快语速阈值（单词/秒）",
+        "rate_threshold_fast": 6.0
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，俄语使用2平衡延迟和准确性",
+        "agreement_n": 2,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），俄语可以稍大一些",
+        "vac_chunk_size": 0.10,
+        "_comment_vad_threshold": "VAD阈值，俄语语音特征需要更敏感",
+        "vad_threshold": 0.55
+      }
+    },
+    "_comment": "当识别语言为 'it' 时，使用此配置覆盖默认配置",
+    "it": {
+      "_comment": "意大利语优化配置：针对意大利语语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "意大利语文本相似度阈值（意大利语词汇变化较大）",
+        "similarity_threshold": 0.80,
+        "_comment_time_window": "时间窗口（秒），意大利语停顿适中",
+        "time_window": 3.5,
+        "_comment_min_length": "最小文本长度（字符数），意大利语需要更多字符才有意义",
+        "min_length": 4,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），意大利语停顿适中",
+        "initial_silence_ms": 1000,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），意大利语说话节奏较快",
+        "min_silence_ms": 450,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 1600,
+        "_comment_rate_threshold_slow": "慢语速阈值（单词/秒），意大利语正常语速约3-7单词/秒",
+        "rate_threshold_slow": 3.0,
+        "_comment_rate_threshold_fast": "快语速阈值（单词/秒）",
+        "rate_threshold_fast": 7.0
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，意大利语使用2平衡延迟和准确性",
+        "agreement_n": 2,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），意大利语可以稍大一些",
+        "vac_chunk_size": 0.10,
+        "_comment_vad_threshold": "VAD阈值，意大利语语音特征需要更敏感",
+        "vad_threshold": 0.55
+      }
+    },
+    "_comment": "当识别语言为 'pt' 时，使用此配置覆盖默认配置",
+    "pt": {
+      "_comment": "葡萄牙语优化配置：针对葡萄牙语语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "葡萄牙语文本相似度阈值（葡萄牙语词汇变化较大）",
+        "similarity_threshold": 0.80,
+        "_comment_time_window": "时间窗口（秒），葡萄牙语停顿适中",
+        "time_window": 3.5,
+        "_comment_min_length": "最小文本长度（字符数），葡萄牙语需要更多字符才有意义",
+        "min_length": 4,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），葡萄牙语停顿适中",
+        "initial_silence_ms": 1000,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），葡萄牙语说话节奏适中",
+        "min_silence_ms": 500,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 1600,
+        "_comment_rate_threshold_slow": "慢语速阈值（单词/秒），葡萄牙语正常语速约2.5-6.5单词/秒",
+        "rate_threshold_slow": 2.5,
+        "_comment_rate_threshold_fast": "快语速阈值（单词/秒）",
+        "rate_threshold_fast": 6.5
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，葡萄牙语使用2平衡延迟和准确性",
+        "agreement_n": 2,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），葡萄牙语可以稍大一些",
+        "vac_chunk_size": 0.10,
+        "_comment_vad_threshold": "VAD阈值，葡萄牙语语音特征需要更敏感",
+        "vad_threshold": 0.55
+      }
+    },
+    "_comment": "当识别语言为 'ar' 时，使用此配置覆盖默认配置",
+    "ar": {
+      "_comment": "阿拉伯语优化配置：针对阿拉伯语语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "阿拉伯语文本相似度阈值（阿拉伯语词汇重复度中等）",
+        "similarity_threshold": 0.82,
+        "_comment_time_window": "时间窗口（秒），阿拉伯语停顿适中",
+        "time_window": 3.5,
+        "_comment_min_length": "最小文本长度（字符数），阿拉伯语2-3个字符通常有意义",
+        "min_length": 3,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），阿拉伯语停顿适中",
+        "initial_silence_ms": 1000,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），阿拉伯语说话节奏适中",
+        "min_silence_ms": 500,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 1600,
+        "_comment_rate_threshold_slow": "慢语速阈值（字符/秒），阿拉伯语正常语速约3-10字符/秒",
+        "rate_threshold_slow": 3.0,
+        "_comment_rate_threshold_fast": "快语速阈值（字符/秒）",
+        "rate_threshold_fast": 10.0
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，阿拉伯语使用3更准确",
+        "agreement_n": 3,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），阿拉伯语需要适中上下文",
+        "vac_chunk_size": 0.09,
+        "_comment_vad_threshold": "VAD阈值，阿拉伯语语音特征较明显",
+        "vad_threshold": 0.6
+      }
+    },
+    "_comment": "当识别语言为 'hi' 时，使用此配置覆盖默认配置",
+    "hi": {
+      "_comment": "印地语优化配置：针对印地语语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "印地语文本相似度阈值（印地语词汇重复度中等）",
+        "similarity_threshold": 0.82,
+        "_comment_time_window": "时间窗口（秒），印地语停顿适中",
+        "time_window": 3.5,
+        "_comment_min_length": "最小文本长度（字符数），印地语2-3个字符通常有意义",
+        "min_length": 3,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），印地语停顿适中",
+        "initial_silence_ms": 1000,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），印地语说话节奏适中",
+        "min_silence_ms": 500,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 1600,
+        "_comment_rate_threshold_slow": "慢语速阈值（字符/秒），印地语正常语速约3-10字符/秒",
+        "rate_threshold_slow": 3.0,
+        "_comment_rate_threshold_fast": "快语速阈值（字符/秒）",
+        "rate_threshold_fast": 10.0
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，印地语使用3更准确",
+        "agreement_n": 3,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），印地语需要适中上下文",
+        "vac_chunk_size": 0.09,
+        "_comment_vad_threshold": "VAD阈值，印地语语音特征较明显",
+        "vad_threshold": 0.6
+      }
+    },
+    "_comment": "当识别语言为 'th' 时，使用此配置覆盖默认配置",
+    "th": {
+      "_comment": "泰语优化配置：针对泰语语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "泰语文本相似度阈值（泰语词汇重复度中等）",
+        "similarity_threshold": 0.82,
+        "_comment_time_window": "时间窗口（秒），泰语停顿适中",
+        "time_window": 3.5,
+        "_comment_min_length": "最小文本长度（字符数），泰语2-3个字符通常有意义",
+        "min_length": 2,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），泰语停顿适中",
+        "initial_silence_ms": 1000,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），泰语说话节奏适中",
+        "min_silence_ms": 500,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 1600,
+        "_comment_rate_threshold_slow": "慢语速阈值（字符/秒），泰语正常语速约3-10字符/秒",
+        "rate_threshold_slow": 3.0,
+        "_comment_rate_threshold_fast": "快语速阈值（字符/秒）",
+        "rate_threshold_fast": 10.0
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，泰语使用3更准确",
+        "agreement_n": 3,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），泰语需要适中上下文",
+        "vac_chunk_size": 0.09,
+        "_comment_vad_threshold": "VAD阈值，泰语语音特征较明显",
+        "vad_threshold": 0.6
+      }
+    },
+    "_comment": "当识别语言为 'vi' 时，使用此配置覆盖默认配置",
+    "vi": {
+      "_comment": "越南语优化配置：针对越南语语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "越南语文本相似度阈值（越南语词汇重复度中等）",
+        "similarity_threshold": 0.82,
+        "_comment_time_window": "时间窗口（秒），越南语停顿适中",
+        "time_window": 3.5,
+        "_comment_min_length": "最小文本长度（字符数），越南语2-3个字符通常有意义",
+        "min_length": 2,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），越南语停顿适中",
+        "initial_silence_ms": 1000,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），越南语说话节奏适中",
+        "min_silence_ms": 500,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 1600,
+        "_comment_rate_threshold_slow": "慢语速阈值（字符/秒），越南语正常语速约3-10字符/秒",
+        "rate_threshold_slow": 3.0,
+        "_comment_rate_threshold_fast": "快语速阈值（字符/秒）",
+        "rate_threshold_fast": 10.0
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，越南语使用3更准确",
+        "agreement_n": 3,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），越南语需要适中上下文",
+        "vac_chunk_size": 0.09,
+        "_comment_vad_threshold": "VAD阈值，越南语语音特征较明显",
+        "vad_threshold": 0.6
+      }
+    },
+    "_comment": "当识别语言为 'id' 时，使用此配置覆盖默认配置",
+    "id": {
+      "_comment": "印尼语优化配置：针对印尼语语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "印尼语文本相似度阈值（印尼语词汇变化较大）",
+        "similarity_threshold": 0.80,
+        "_comment_time_window": "时间窗口（秒），印尼语停顿适中",
+        "time_window": 3.5,
+        "_comment_min_length": "最小文本长度（字符数），印尼语需要更多字符才有意义",
+        "min_length": 4,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），印尼语停顿适中",
+        "initial_silence_ms": 1000,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），印尼语说话节奏适中",
+        "min_silence_ms": 500,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 1600,
+        "_comment_rate_threshold_slow": "慢语速阈值（单词/秒），印尼语正常语速约2.5-6.5单词/秒",
+        "rate_threshold_slow": 2.5,
+        "_comment_rate_threshold_fast": "快语速阈值（单词/秒）",
+        "rate_threshold_fast": 6.5
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，印尼语使用2平衡延迟和准确性",
+        "agreement_n": 2,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），印尼语可以稍大一些",
+        "vac_chunk_size": 0.10,
+        "_comment_vad_threshold": "VAD阈值，印尼语语音特征需要更敏感",
+        "vad_threshold": 0.55
+      }
+    },
+    "_comment": "当识别语言为 'nl' 时，使用此配置覆盖默认配置",
+    "nl": {
+      "_comment": "荷兰语优化配置：针对荷兰语语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "荷兰语文本相似度阈值（荷兰语词汇变化较大）",
+        "similarity_threshold": 0.80,
+        "_comment_time_window": "时间窗口（秒），荷兰语停顿适中",
+        "time_window": 3.5,
+        "_comment_min_length": "最小文本长度（字符数），荷兰语需要更多字符才有意义",
+        "min_length": 4,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），荷兰语停顿适中",
+        "initial_silence_ms": 1100,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），荷兰语说话节奏适中",
+        "min_silence_ms": 550,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 1800,
+        "_comment_rate_threshold_slow": "慢语速阈值（单词/秒），荷兰语正常语速约2.5-6单词/秒",
+        "rate_threshold_slow": 2.5,
+        "_comment_rate_threshold_fast": "快语速阈值（单词/秒）",
+        "rate_threshold_fast": 6.0
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，荷兰语使用2平衡延迟和准确性",
+        "agreement_n": 2,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），荷兰语可以稍大一些",
+        "vac_chunk_size": 0.10,
+        "_comment_vad_threshold": "VAD阈值，荷兰语语音特征需要更敏感",
+        "vad_threshold": 0.55
+      }
+    },
+    "_comment": "当识别语言为 'pl' 时，使用此配置覆盖默认配置",
+    "pl": {
+      "_comment": "波兰语优化配置：针对波兰语语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "波兰语文本相似度阈值（波兰语词汇变化较大）",
+        "similarity_threshold": 0.80,
+        "_comment_time_window": "时间窗口（秒），波兰语停顿适中",
+        "time_window": 3.5,
+        "_comment_min_length": "最小文本长度（字符数），波兰语需要更多字符才有意义",
+        "min_length": 4,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），波兰语停顿适中",
+        "initial_silence_ms": 1100,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），波兰语说话节奏适中",
+        "min_silence_ms": 550,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 1800,
+        "_comment_rate_threshold_slow": "慢语速阈值（单词/秒），波兰语正常语速约2.5-6单词/秒",
+        "rate_threshold_slow": 2.5,
+        "_comment_rate_threshold_fast": "快语速阈值（单词/秒）",
+        "rate_threshold_fast": 6.0
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，波兰语使用2平衡延迟和准确性",
+        "agreement_n": 2,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），波兰语可以稍大一些",
+        "vac_chunk_size": 0.10,
+        "_comment_vad_threshold": "VAD阈值，波兰语语音特征需要更敏感",
+        "vad_threshold": 0.55
+      }
+    },
+    "_comment": "当识别语言为 'tr' 时，使用此配置覆盖默认配置",
+    "tr": {
+      "_comment": "土耳其语优化配置：针对土耳其语语音特点调整",
+      "skip_detector": {
+        "_comment_similarity_threshold": "土耳其语文本相似度阈值（土耳其语词汇变化较大）",
+        "similarity_threshold": 0.80,
+        "_comment_time_window": "时间窗口（秒），土耳其语停顿适中",
+        "time_window": 3.5,
+        "_comment_min_length": "最小文本长度（字符数），土耳其语需要更多字符才有意义",
+        "min_length": 4,
+        "_comment_use_edit_distance": "是否使用编辑距离算法",
+        "use_edit_distance": true
+      },
+      "speech_rate_adaptive": {
+        "_comment_initial_silence_ms": "初始静音检测时间（毫秒），土耳其语停顿适中",
+        "initial_silence_ms": 1000,
+        "_comment_min_silence_ms": "最小静音检测时间（毫秒），土耳其语说话节奏适中",
+        "min_silence_ms": 500,
+        "_comment_max_silence_ms": "最大静音检测时间（毫秒）",
+        "max_silence_ms": 1600,
+        "_comment_rate_threshold_slow": "慢语速阈值（单词/秒），土耳其语正常语速约2.5-6.5单词/秒",
+        "rate_threshold_slow": 2.5,
+        "_comment_rate_threshold_fast": "快语速阈值（单词/秒）",
+        "rate_threshold_fast": 6.5
+      },
+      "asr_optimization": {
+        "_comment_agreement_n": "Local Agreement-n的n值，土耳其语使用2平衡延迟和准确性",
+        "agreement_n": 2,
+        "_comment_vac_chunk_size": "VAC音频块大小（秒），土耳其语可以稍大一些",
+        "vac_chunk_size": 0.10,
+        "_comment_vad_threshold": "VAD阈值，土耳其语语音特征需要更敏感",
+        "vad_threshold": 0.55
+      }
+    },
+    "_comment_default": "默认配置：用于未指定的语言或auto模式，使用全局默认配置",
+    "default": {
+      "_comment": "默认配置继承自全局配置，无需重复定义"
+    }
+  }
+}
