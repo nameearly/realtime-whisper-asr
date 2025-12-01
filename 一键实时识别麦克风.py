@@ -78,7 +78,23 @@ whisper_path = os.path.join(os.path.dirname(__file__), 'whisper_streaming-main',
 if os.path.exists(whisper_path):
     sys.path.insert(0, whisper_path)
 else:
-    print(f"错误: 找不到 whisper_streaming 目录: {whisper_path}")
+    print("=" * 60)
+    print("❌ 错误: 找不到 whisper_streaming 目录")
+    print("=" * 60)
+    print(f"预期路径: {whisper_path}")
+    print()
+    print("请按照以下步骤安装 whisper_streaming:")
+    print()
+    print("方法 1: 使用 Git（推荐）")
+    print("  git clone https://github.com/ufal/whisper_streaming.git whisper_streaming-main/whisper_streaming-main")
+    print()
+    print("方法 2: 手动下载")
+    print("  1. 访问: https://github.com/ufal/whisper_streaming")
+    print("  2. 点击 'Code' → 'Download ZIP'")
+    print("  3. 解压到项目根目录，确保路径为: whisper_streaming-main/whisper_streaming-main/")
+    print()
+    print("详细说明请参考 README.md")
+    print("=" * 60)
     sys.exit(1)
 
 def check_dependencies():

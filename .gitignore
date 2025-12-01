@@ -76,6 +76,9 @@ ENV/
 # pyenv
 .python-version
 
+# 第三方依赖（需要用户自行下载）
+whisper_streaming-main/
+
 # 其他
 *.sqlite
 *.db

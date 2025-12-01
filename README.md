@@ -1,3 +1,11 @@
+本项目是我用cursor写了一点程序，利用已有开源项目，
+以本地识别模型加硅基流动免费翻译api实现的
+一键实时识别麦克风
+建议使用环境变量SILICONFLOW_API_KEY
+可以暂时使用我的密钥sk-nwysntwtfqqgjufnictpmmndlaqvflifrfmzuqtyppvqkgxn
+
+下面是cursor为我写说明文件
+
 # Realtime Whisper ASR
 
 基于 Whisper 的实时语音识别系统，支持多语言识别、自动翻译、语音活动检测等功能。
@@ -47,7 +55,28 @@ git clone https://github.com/yourusername/realtime-whisper-asr.git
 cd realtime-whisper-asr
 ```
 
-#### 2. 安装依赖
+#### 2. 安装 whisper_streaming 依赖
+
+本项目依赖 [whisper_streaming](https://github.com/ufal/whisper_streaming) 项目，需要手动下载：
+
+**方法 1：使用 Git（推荐）**
+```bash
+cd 项目根目录
+git clone https://github.com/ufal/whisper_streaming.git whisper_streaming-main/whisper_streaming-main
+```
+
+**方法 2：手动下载**
+1. 访问：https://github.com/ufal/whisper_streaming
+2. 点击 "Code" → "Download ZIP"
+3. 解压到项目根目录，确保路径为：`whisper_streaming-main/whisper_streaming-main/`
+
+**验证安装：**
+确保以下文件存在：
+- `whisper_streaming-main/whisper_streaming-main/whisper_online.py`
+- `whisper_streaming-main/whisper_streaming-main/silero_vad_iterator.py`
+- `whisper_streaming-main/whisper_streaming-main/line_packet.py`
+
+#### 3. 安装 Python 依赖
 
 **基础依赖（必需）：**
 ```bash
@@ -63,7 +92,7 @@ pip install faster-whisper sounddevice numpy torch torchaudio silero-vad request
 - 使用原始 whisper：`pip install openai-whisper whisper-timestamped`
 - 使用人声分离：`pip install demucs` 或 `pip install spleeter`
 
-#### 3. 配置环境变量（可选）
+#### 4. 配置环境变量（可选）
 
 如果使用翻译功能，需要配置 API key：
 
@@ -102,7 +131,7 @@ SILICONFLOW_API_KEY=your_api_key_here
 
 > **注意**：`.env` 文件已添加到 `.gitignore`，不会被上传到 GitHub。
 
-#### 4. 下载模型
+#### 5. 下载模型
 
 首次运行时会自动下载模型，也可以手动下载：
 

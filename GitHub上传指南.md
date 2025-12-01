@@ -2,6 +2,18 @@
 
 本指南将帮助你使用命令行将项目上传到 GitHub。
 
+## ✅ 当前状态
+
+**已完成：**
+- ✅ Git 仓库已初始化
+- ✅ 首次提交已创建（提交 ID: 4d9c91a）
+- ✅ 远程仓库已连接：`https://github.com/nameearly/realtime-whisper-asr.git`
+- ✅ `whisper_streaming-main` 文件夹已从 Git 中移除（不会上传）
+
+**待完成：**
+- ⏳ 提交最新的修改（.gitignore, README.md 等）
+- ⏳ 推送代码到 GitHub
+
 ## 📋 前置准备
 
 1. **安装 Git**
@@ -20,86 +32,58 @@
 
 ## 🚀 上传步骤
 
-### 步骤 1：初始化 Git 仓库
+### 步骤 1：提交最新的修改
 
-在项目根目录（`d:\whisper`）执行：
-
-```bash
-git init
-```
-
-### 步骤 2：添加所有文件到暂存区
+当前有一些文件已修改但未提交，需要先提交这些更改：
 
 ```bash
-git add .
-```
-
-**说明：**
-- `.` 表示添加当前目录下的所有文件
-- 根据 `.gitignore` 的配置，敏感文件和模型文件不会被添加
-
-### 步骤 3：查看将要提交的文件（可选）
-
-```bash
+# 1. 查看当前状态
 git status
-```
 
-这会显示：
-- ✅ 绿色：已添加到暂存区的文件
-- ❌ 红色：未跟踪的文件（会被忽略的文件）
+# 2. 添加所有修改的文件
+git add .
 
-### 步骤 4：创建首次提交
-
-```bash
-git commit -m "Initial commit: 实时语音识别系统"
+# 3. 提交更改
+git commit -m "Update: 移除 whisper_streaming-main，添加安装说明，改进错误提示"
 ```
 
 **说明：**
-- `-m` 后面是提交信息，描述这次提交的内容
-- 可以写中文或英文
+- 这次提交包含了移除 `whisper_streaming-main` 的更改
+- 以及更新 `.gitignore`、`README.md` 等文件的修改
 
-### 步骤 5：在 GitHub 上创建仓库
-
-1. 登录 GitHub：https://github.com
-2. 点击右上角的 **"+"** → **"New repository"**
-3. 填写仓库信息：
-   - **Repository name**: `realtime-whisper-asr`（或你喜欢的名字）
-   - **Description**: `基于 Whisper 的实时语音识别系统`
-   - **Visibility**: 选择 **Public**（公开）或 **Private**（私有）
-   - ⚠️ **不要**勾选 "Initialize this repository with a README"（我们已经有了）
-4. 点击 **"Create repository"**
-
-### 步骤 6：连接远程仓库
-
-创建仓库后，GitHub 会显示仓库地址，类似：
-```
-https://github.com/你的用户名/realtime-whisper-asr.git
-```
-
-在命令行执行：
+### 步骤 2：推送代码到 GitHub
 
 ```bash
-git remote add origin https://github.com/你的用户名/realtime-whisper-asr.git
-```
-
-**说明：**
-- `origin` 是远程仓库的别名（可以自定义）
-- 将 `你的用户名` 替换为你的 GitHub 用户名
-- 将 `realtime-whisper-asr` 替换为你创建的仓库名
-
-### 步骤 7：推送代码到 GitHub
-
-```bash
+# 1. 将分支重命名为 main（GitHub 默认分支名）
 git branch -M main
+
+# 2. 推送代码到 GitHub
 git push -u origin main
 ```
 
 **说明：**
-- `git branch -M main` 将当前分支重命名为 `main`（GitHub 默认分支名）
+- `git branch -M main` 将当前分支从 `master` 重命名为 `main`（GitHub 默认分支名）
 - `git push -u origin main` 推送代码到远程仓库
 - `-u` 参数设置上游分支，之后可以直接使用 `git push`
 
+### 步骤 3：验证上传结果
+
+推送成功后，访问你的仓库地址查看：
+```
+https://github.com/nameearly/realtime-whisper-asr
+```
+
+**检查要点：**
+- ✅ 所有代码文件都已上传
+- ✅ `whisper_streaming-main` 文件夹**没有**出现在仓库中
+- ✅ `.env` 文件**没有**出现在仓库中（在 `.gitignore` 中）
+- ✅ `models/` 和 `models_fast/` 文件夹**没有**出现在仓库中
+
+## 🔐 认证问题解决
+
 **如果遇到认证问题：**
+
+GitHub 已不再支持密码认证，需要使用 Personal Access Token：
 
 GitHub 已不再支持密码认证，需要使用 Personal Access Token：
 
@@ -147,9 +131,15 @@ git add .
 # 3. 提交更改
 git commit -m "描述你的修改内容"
 
-# 4. 推送到 GitHub
+# 4. 推送到 GitHub（如果已设置上游分支，直接 push 即可）
 git push
 ```
+
+**提交信息建议：**
+- 使用清晰的中文或英文描述
+- 例如：`"Fix: 修复翻译 API 错误处理"`
+- 例如：`"Update: 更新 README 添加新功能说明"`
+- 例如：`"Add: 添加新的语言支持"`
 
 ## 🔍 常用命令
 
@@ -182,18 +172,74 @@ git status --ignored
    - ✅ `.env` 文件已添加到 `.gitignore`，不会被上传
    - ✅ 模型文件（`models/`, `models_fast/`）不会被上传
    - ✅ 日志文件不会被上传
+   - ✅ `whisper_streaming-main/` 文件夹不会被上传（用户需要自行安装）
 
 2. **提交前检查：**
    - 使用 `git status` 确认没有意外添加敏感文件
    - 确认 `.env` 文件不在列表中
+   - 确认 `whisper_streaming-main` 文件夹不在列表中
 
-3. **如果误提交了敏感文件：**
+3. **关于 whisper_streaming-main：**
+   - 该文件夹已从 Git 中移除，不会上传到 GitHub
+   - 用户需要按照 README.md 中的说明自行安装
+   - 这是为了避免包含第三方项目的代码
+
+4. **如果误提交了敏感文件：**
    ```bash
    # 从 Git 历史中删除（但保留本地文件）
    git rm --cached .env
    git commit -m "Remove sensitive file"
    git push
    ```
+
+## 🐛 常见问题
+
+### 问题 1：推送时提示 "fatal: not a git repository"
+
+**原因：** 当前目录不是 Git 仓库
+
+**解决：** 确保在项目根目录（`d:\whisper`）执行命令
+
+### 问题 2：推送时提示 "remote origin already exists"
+
+**原因：** 远程仓库已经添加过了
+
+**解决：** 
+```bash
+# 查看当前远程仓库
+git remote -v
+
+# 如果需要修改，先删除再添加
+git remote remove origin
+git remote add origin https://github.com/nameearly/realtime-whisper-asr.git
+```
+
+### 问题 3：推送时提示认证失败
+
+**原因：** 需要使用 Personal Access Token 而不是密码
+
+**解决：** 参考上面的"认证问题解决"部分
+
+### 问题 4：推送很慢或卡住
+
+**原因：** 可能是网络问题或文件较大
+
+**解决：**
+- 检查网络连接
+- 确认 `.gitignore` 正确配置，大文件（如模型）不会被上传
+- 可以尝试使用 SSH 方式（更稳定）
+
+### 问题 5：分支名称冲突
+
+**原因：** GitHub 默认分支是 `main`，但本地可能是 `master`
+
+**解决：**
+```bash
+# 重命名分支
+git branch -M main
+# 然后推送
+git push -u origin main
+```
 
 ## 🎉 完成！
 

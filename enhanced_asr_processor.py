@@ -21,7 +21,12 @@ if os.path.exists(whisper_path):
     sys.path.insert(0, whisper_path)
     from whisper_online import HypothesisBuffer, OnlineASRProcessor, VACOnlineASRProcessor
 else:
-    raise ImportError(f"找不到 whisper_streaming 目录: {whisper_path}")
+    error_msg = (
+        f"找不到 whisper_streaming 目录: {whisper_path}\n"
+        "请按照 README.md 中的说明安装 whisper_streaming:\n"
+        "  git clone https://github.com/ufal/whisper_streaming.git whisper_streaming-main/whisper_streaming-main"
+    )
+    raise ImportError(error_msg)
 
 
 class EnhancedHypothesisBuffer(HypothesisBuffer):
