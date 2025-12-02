@@ -1,0 +1,14 @@
+# 允许所有搜索引擎爬虫访问（无任何限制）
+User-agent: *
+Allow: /
+
+# 可选：针对特定爬虫补充说明（非必需，仅为兼容性优化）
+User-agent: bingbot
+Allow: /
+
+User-agent: baidu
+Allow: /
+crawl-delay: 0  # 百度爬虫无延迟限制（若需允许高频爬取可加此行）
+
+User-agent: googlebot
+Allow: /
